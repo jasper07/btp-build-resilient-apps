@@ -182,8 +182,8 @@ resources:
       service: application-logs
       service-plan: lite
     # Application Logging
-  - name: BusinessPartnerVerification-autoscaler
-    type: org.cloudfoundry.managed-service
-    parameters:
-      service: autoscaler
-      service-plan: lite
+  # - name: BusinessPartnerVerification-autoscaler
+  #   type: org.cloudfoundry.managed-service
+  #   parameters:
+  #     service: autoscaler
+  #     service-plan: standard
