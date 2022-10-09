@@ -38,7 +38,7 @@ jobs:
     #       CF_SPACE: ${{ secrets.CF_SPACE }}
     #       CF_API: ${{ secrets.CF_API }}
   build:
-    needs: setup
+    # needs: setup
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
