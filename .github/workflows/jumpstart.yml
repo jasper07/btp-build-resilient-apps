@@ -4,39 +4,39 @@ on: [workflow_dispatch]
 
 jobs:
   #rather auxiliary job to avoid hitting storage limits in the GitHub free plan if you store the MTA files
-  cleanup:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: kolpav/purge-artifacts-action@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          expire-in: 0days # Setting this to 0 will delete all artifacts
-  setup:
-    runs-on: ubuntu-latest
+  # cleanup:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: kolpav/purge-artifacts-action@v1
+  #       with:
+  #         token: ${{ secrets.GITHUB_TOKEN }}
+  #         expire-in: 0days # Setting this to 0 will delete all artifacts
+  # setup:
+    # runs-on: ubuntu-latest
 
-    steps:
-      - name: checkout repository
-        uses: actions/checkout@v2
-      - name: Downloads SAPCP CLI
-        run: .github/workflows/scripts/download_cli
-        env:
-          GLOBAL_ACCOUNT: ${{ secrets.GLOBAL_ACCOUNT }}
-          CF_USERNAME: ${{ secrets.CF_USERNAME }}
-          CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
-      - name: Assign Entitlements
-        run: .github/workflows/scripts/assign_entitlements
-        env:
-          GLOBAL_ACCOUNT: ${{ secrets.GLOBAL_ACCOUNT }}
-      - name: subscribe to apps
-        run: .github/workflows/scripts/subscribe
-      - name: create SAP HANA Cloud instance if not existing
-        run: .github/workflows/scripts/hana_cloud_setup
-        env:
-          CF_USERNAME: ${{ secrets.CF_USERNAME }}
-          CF_ORG: ${{ secrets.CF_ORG }}
-          CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
-          CF_SPACE: ${{ secrets.CF_SPACE }}
-          CF_API: ${{ secrets.CF_API }}
+    # steps:
+    #   - name: checkout repository
+    #     uses: actions/checkout@v2
+    #   - name: Downloads SAPCP CLI
+    #     run: .github/workflows/scripts/download_cli
+    #     env:
+    #       GLOBAL_ACCOUNT: ${{ secrets.GLOBAL_ACCOUNT }}
+    #       CF_USERNAME: ${{ secrets.CF_USERNAME }}
+    #       CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+    #   - name: Assign Entitlements
+    #     run: .github/workflows/scripts/assign_entitlements
+    #     env:
+    #       GLOBAL_ACCOUNT: ${{ secrets.GLOBAL_ACCOUNT }}
+    #   - name: subscribe to apps
+    #     run: .github/workflows/scripts/subscribe
+    #   - name: create SAP HANA Cloud instance if not existing
+    #     run: .github/workflows/scripts/hana_cloud_setup
+    #     env:
+    #       CF_USERNAME: ${{ secrets.CF_USERNAME }}
+    #       CF_ORG: ${{ secrets.CF_ORG }}
+    #       CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+    #       CF_SPACE: ${{ secrets.CF_SPACE }}
+    #       CF_API: ${{ secrets.CF_API }}
   build:
     needs: setup
     runs-on: ubuntu-latest
@@ -51,7 +51,7 @@ jobs:
       - name: Disable package-lock.json
         run: npm config set package-lock false
       - name: Build MTA
-        run: mbt build -p cf --mtar BusinessPartnerVerification.mtar -e trial.mtaext
+        run: mbt build -p cf --mtar BusinessPartnerVerification.mtar -e live.mtaext
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
